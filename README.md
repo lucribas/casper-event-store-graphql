@@ -22,13 +22,17 @@ User <--> back : "GraphQL"
 ```plantuml
 @startwbs
 * Event Store
+** MongoDB
 ** Java Service
 *** Casper Java SDK
 *** Spring Boot
 *** Spring Data MongoDB
 *** GraphQL - ProjectReactor
-** MongoDB
-*** MongoDB Express
+** Tools
+*** MongoDB Compass Gui
+*** Postman
+
+
 @endwbs
 ```
 
@@ -100,3 +104,10 @@ mongodb-compass
 #### Embedded MongoDB Database (TESTING)
 **Title**: Use "Embedded MongoDB Database"
 **Justification**: Provides a plataform neutral way for running MongoDB in unit tests.
+
+
+
+test
+
+<script id="asciicast-bpUwklc2PS45j4ifL2AWp6rm9" src="https://asciinema.org/a/bpUwklc2PS45j4ifL2AWp6rm9.js" async></script>
+
