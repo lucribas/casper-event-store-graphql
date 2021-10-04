@@ -41,7 +41,17 @@ Start MongoDB in container container:
 cd docker
 docker-compose up -d
 ```
-Open the address http://localhost:8081
+
+Test your mongo instance:
+```bash
+docker exec -it mongo bash
+mongo mongodb://admin:admin123@localhost:27017
+show dbs
+```
+
+![MongoDB](docs/images/Screenshot%20from%202021-10-04%2016-27-12.png)
+
+
 
 ## 2.2 MongoDB Compass Gui
 
@@ -60,6 +70,7 @@ source: https://docs.mongodb.com/compass/current/install/
 ```bash
 mongodb-compass
 ```
+![MongoDB Compass](docs/images/Screenshot%20from%202021-10-04%2016-24-22.png)
 
 2. **Conect** to your MondoDB with the following URI:
 `mongodb://admin:admin123@localhost:27017`
