@@ -4,7 +4,10 @@ import com.coxautodev.graphql.tools.GraphQLQueryResolver;
 import com.lribas.eventstore.error.BlockNotFoundException;
 import com.lribas.eventstore.model.Block;
 import com.lribas.eventstore.repository.BlockRepository;
+import com.lribas.eventstore.services.EventConsumer;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
 
 import lombok.RequiredArgsConstructor;
@@ -13,7 +16,10 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class QueryResolver implements GraphQLQueryResolver {
 
-    private final BlockRepository blockRepository;
+	private final BlockRepository blockRepository;
+	private final EventConsumer ec;
+
+	private static Logger logger = LoggerFactory.getLogger(QueryResolver.class);
 
     public Block block(String hashId) {
         return blockRepository.findById(hashId)
@@ -21,6 +27,9 @@ public class QueryResolver implements GraphQLQueryResolver {
     }
 
     public Iterable<Block> allBlocks() {
+		ec.consumeFlux();
+		logger.info("RUNNNNNNNNNNNN!!!");
+
         return blockRepository.findAll();
     }
 
