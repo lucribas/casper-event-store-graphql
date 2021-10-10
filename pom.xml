@@ -8,9 +8,9 @@
 		<relativePath /> <!-- lookup parent from repository -->
 	</parent>
 	<groupId>com.lribas</groupId>
-	<artifactId>eventstore</artifactId>
+	<artifactId>graphql-api</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
-	<name>eventstore</name>
+	<name>graphql-api</name>
 	<description>An Event Store Implementation using Casper SDK +  MongoDB + GraphQL</description>
 	<properties>
 		<java.version>11</java.version>

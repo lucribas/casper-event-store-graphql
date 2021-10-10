@@ -1,0 +1,8 @@
+FROM python:3.8-slim
+
+RUN apt -y update
+RUN apt -y install apt-utils
+RUN apt -y install pkg-config libssl-dev git jq curl procps vim lsof
+
+## CASPER CLIENT ##
+RUN curl -L https://github.com/casper-network/casper-node/releases/download/v1.3.3/casper-client_1.3.3-0_amd64.deb -o ~/casper-client_1.3.3-0_amd64.deb && dpkg -i ~/casper-client_1.3.3-0_amd64.deb

@@ -1,0 +1,19 @@
+schema {
+    query: Query
+}
+
+type Block {
+    hashId: String
+    header: [String]
+    body: [String]
+    proofs: [String]
+    createdAt: String
+    lastModified: String
+    version: Int
+}
+
+type Query {
+    block(hashId : String!): Block
+    allBlocks : [Block]
+}
+

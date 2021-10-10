@@ -1,3 +1,10 @@
+
+
+
+https://www.youtube.com/watch?v=bdfEjn6xZx0
+https://github.com/graphql-java-kickstart/graphql-spring-boot/blob/master/graphql-spring-boot-test/src/test/java/com/graphql/spring/boot/test/GraphQLTestSubscriptionAwaitAndGetResponseTest.java
+
+
 # casper-event-store-graphql
 An Event Store Implementation using Casper SDK +  MongoDB + GraphQL
 
@@ -35,6 +42,47 @@ User <--> back : "GraphQL"
 
 @endwbs
 ```
+
+
+# RUN
+
+```bash
+
+cd docker/
+docker-compose up
+
+# other terminal
+
+docker exec -it nctl /bin/bash
+
+cd ~/dev
+source ~/.bashrc
+source env/bin/activate
+source casper-node/utils/nctl/activate
+
+nctl-assets-setup
+sleep 4
+figlet "Starting"
+nctl-start
+sleep 1
+nctl-status
+```
+
+mvn clean install
+mvn spring-boot:run
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 # 2. Requisites
@@ -88,6 +136,9 @@ mongodb-compass
 # 3. Future Improvements
 
 
+Use Hash as MongoDB identifier instead ObjectID auto-generated id.
+
+
 ## 3.1 Migrate to a Reactive Stack
 ### 3.1.1 Spring Data Reactive MongoDB (NOSQL)
 (1)
@@ -108,6 +159,90 @@ mongodb-compass
 
 
 test
+<a href="https://asciinema.org/a/bpUwklc2PS45j4ifL2AWp6rm9" target="_blank"><img src="https://asciinema.org/a/bpUwklc2PS45j4ifL2AWp6rm9.svg" /></a>
 
-<script id="asciicast-bpUwklc2PS45j4ifL2AWp6rm9" src="https://asciinema.org/a/bpUwklc2PS45j4ifL2AWp6rm9.js" async></script>
+time docker-compose build
+
+
+
+
+docker run --interactive --tty --entrypoint /bin/sh docker_nctl
+# remove chaincode docker images
+docker rm $(docker ps -aq)
+# remove volumes
+docker volume rm $(docker volume ls -q)
+
+
+docker system prune -a
+
+
+
+docker run --interactive --tty --entrypoint /bin/bash docker_nctl
+docker run --interactive --tty --entrypoint /bin/bash docker_casper-client
+
+
+
+## START
+cd ~/dev
+/root/evt/docker/nctl/nctl_compile.bash
+
+### tools
+nctl-assets-setup
+sleep 10
+nctl-start
+nctl-status
+
+nctl-view-faucet-account
+
+---------------------------------------------
+
+
+
+casper-client get-state-root-hash --node-address http://localhost:11101
+
+nctl-view-faucet-account
+
+grep -R "started event stream server" ~/dev/casper-node/utils/nctl/dumps
+
+curl -s  http://localhost:18102/events/main
+
+lsof | grep LISTE | cut -d':' -f2 | sort | uniq
+11101 (LISTEN)
+11102 (LISTEN)
+11103 (LISTEN)
+11104 (LISTEN)
+11105 (LISTEN)
+14101 (LISTEN)
+14102 (LISTEN)
+14103 (LISTEN)
+14104 (LISTEN)
+14105 (LISTEN)
+18101 (LISTEN)
+18102 (LISTEN)
+18103 (LISTEN)
+18104 (LISTEN)
+18105 (LISTEN)
+22101 (LISTEN)
+22102 (LISTEN)
+22103 (LISTEN)
+22104 (LISTEN)
+22105 (LISTEN)
+
+
+
+
+
+
+
+
+
+
+curl -g -X POST -H "Content-Type: application/json" -d '{"query":"query{allBlocks {hashId}}"}' http://localhost:8080/graphql | jq
+
+
+
+
+
+
+
 

@@ -9,11 +9,33 @@ services:
       MONGO_INITDB_ROOT_PASSWORD: admin123
     ports:
       - "27017:27017"
-    volumes:
-      - ./volumes/MongoDB:/data/db
+    # volumes:
+    #   - ./volumes/MongoDB:/data/db
     networks:
       - mongo-network
-
+  nctl:
+    container_name: nctl
+    build:
+      context: ../.
+      dockerfile: docker/Dockerfile.nctl  #o path aqui eh apartir do context
+    tty: true
+    ports:
+      - 11101-11105:11101-11105
+      - 14101-14105:14101-14105
+      - 18101-18105:18101-18105
+      - 22101-22105:22101-22105
+    networks:
+      - casper-network
+  casper-client:
+    container_name: casper-client
+    build:
+      context: .
+      dockerfile: Dockerfile.casper-client  #o path aqui eh apartir do context
+    tty: true
+    networks:
+      - casper-network
 networks:
     mongo-network:
+      driver: bridge
+    casper-network:
       driver: bridge
