@@ -17,13 +17,14 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-@Document("block")
-public class Block {
-	String hashId;
-    List<String> header;
-    List<String> body;
+@Document("blockAdded")
+public class BlockAdded {
+	String hash;
+    BlockAddedHeader header;
+    BlockAddedBody body;
     List<String> proofs;
-    @Version
+	// MongoDB object properties
+	@Version
     private Long version;
     @CreatedDate
     private DateTime createdAt;

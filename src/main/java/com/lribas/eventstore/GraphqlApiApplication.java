@@ -12,9 +12,6 @@ public class GraphqlApiApplication {
 	private static Logger logger = LoggerFactory.getLogger(GraphqlApiApplication.class);
 	public static void main(String[] args) {
 		SpringApplication.run(GraphqlApiApplication.class, args);
-		logger.info("RUNNNNNNNNNNNN!!!");
-
-
+		logger.info("GraphQL Running!!!");
 	}
-
 }

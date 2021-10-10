@@ -2,7 +2,9 @@ package com.lribas.eventstore.services;
 
 import java.time.LocalTime;
 
-import com.lribas.eventstore.model.Block;
+import javax.annotation.PostConstruct;
+
+import com.lribas.eventstore.model.BlockAdded;
 import com.lribas.eventstore.repository.BlockRepository;
 
 import org.slf4j.Logger;
@@ -11,13 +13,13 @@ import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.http.MediaType;
 import org.springframework.http.codec.ServerSentEvent;
 import org.springframework.scheduling.annotation.Async;
-import org.springframework.stereotype.Service;
+import org.springframework.stereotype.Component;
 import org.springframework.web.reactive.function.client.WebClient;
 
 import lombok.RequiredArgsConstructor;
 import reactor.core.publisher.Flux;
 
-@Service
+@Component
 @RequiredArgsConstructor
 public class EventConsumer {
 
@@ -25,14 +27,13 @@ public class EventConsumer {
 
 	private static Logger logger = LoggerFactory.getLogger(EventConsumer.class);
     private WebClient client = WebClient.create("http://localhost:18102");
-	// private final EventPersistence eventPersistence;
 
 	public void save(String content) {
-		String hashId = "01234";
-		Block block = Block.builder().hashId(hashId).build();
+
+		String hash = "01234";
+		BlockAdded block = BlockAdded.builder().hash(hash).build();
 		blockRepository.save(block);
 	}
-
 
 	@Async
     public void consumeSSE() {
@@ -76,4 +77,11 @@ public class EventConsumer {
         eventStream.subscribe(content -> logger.info("Current time: {} - Received SSE: name[{}], id [{}], content[{}] ", LocalTime.now(), content.event(), content.id(), content.data()), error -> logger.error("Error receiving SSE: {}", error),
             () -> logger.info("Completed!!!"));
     }
+
+	@PostConstruct
+	private void init() {
+		consumeFlux();
+		logger.info("EventConsumer Running!!");
+	}
+
 }

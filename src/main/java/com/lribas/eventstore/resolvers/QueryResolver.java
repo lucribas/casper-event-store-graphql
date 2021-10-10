@@ -2,9 +2,8 @@ package com.lribas.eventstore.resolvers;
 
 import com.coxautodev.graphql.tools.GraphQLQueryResolver;
 import com.lribas.eventstore.error.BlockNotFoundException;
-import com.lribas.eventstore.model.Block;
+import com.lribas.eventstore.model.BlockAdded;
 import com.lribas.eventstore.repository.BlockRepository;
-import com.lribas.eventstore.services.EventConsumer;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -17,19 +16,17 @@ import lombok.RequiredArgsConstructor;
 public class QueryResolver implements GraphQLQueryResolver {
 
 	private final BlockRepository blockRepository;
-	private final EventConsumer ec;
 
 	private static Logger logger = LoggerFactory.getLogger(QueryResolver.class);
 
-    public Block block(String hashId) {
-        return blockRepository.findById(hashId)
-                .orElseThrow(() -> new BlockNotFoundException("Block not found", hashId));
+    public BlockAdded block(String hash) {
+		logger.info("block("+hash+")");
+        return blockRepository.findById(hash)
+                .orElseThrow(() -> new BlockNotFoundException("Block not found", hash));
     }
 
-    public Iterable<Block> allBlocks() {
-		ec.consumeFlux();
-		logger.info("RUNNNNNNNNNNNN!!!");
-
+    public Iterable<BlockAdded> allBlocks() {
+		logger.info("allBlocks()");
         return blockRepository.findAll();
     }
 
