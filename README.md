@@ -7,7 +7,7 @@ Build an event store implementation using an SDK + MongoDB + GraphQL.
 
 
 
-## Technical Documentation
+## Detailed Technical Documentation
 
 ![source: docs/images/Diagrams_plant_uml.md](docs/images/Diagrams_plant_uml.png)
 
