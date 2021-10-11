@@ -1,0 +1,14 @@
+server:
+  port: 8080
+spring:
+ data:
+  mongodb:
+   database: casper-event-store
+   host: localhost
+   port: 27017
+   username: admin
+   password: admin123
+
+graphiql:
+ subscriptions:
+  timeout: 300000

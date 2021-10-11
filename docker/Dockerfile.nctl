@@ -1,0 +1,26 @@
+FROM python:3.8-slim
+
+RUN apt -y update
+RUN apt -y install apt-utils
+
+## REQUISITES TO NCTL ##
+# source: https://docs.casperlabs.io/en/latest/dapp-dev-guide/setup-nctl.html
+RUN apt -y install pkg-config libssl-dev build-essential git jq curl procps vim lsof figlet
+
+
+## RUSTUP ##
+# source: https://www.rust-lang.org/tools/install
+RUN curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- -y --default-toolchain nightly-2021-06-17-x86_64-unknown-linux-gnu
+
+
+## NCTL ##
+# source: https://docs.casperlabs.io/en/latest/dapp-dev-guide/setup-nctl.html
+RUN mkdir ~/dev \
+	&& cd ~/dev \
+	&& git clone https://github.com/casper-network/casper-node-launcher \
+	&& git clone https://github.com/casper-network/casper-node
+
+COPY . /root/evt
+RUN /root/evt/docker/nctl/nctl_python.bash
+RUN /root/evt/docker/nctl/nctl_compile.bash
+
