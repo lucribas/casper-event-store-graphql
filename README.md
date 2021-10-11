@@ -1,58 +1,32 @@
-
-
-
-https://www.youtube.com/watch?v=bdfEjn6xZx0
-https://github.com/graphql-java-kickstart/graphql-spring-boot/blob/master/graphql-spring-boot-test/src/test/java/com/graphql/spring/boot/test/GraphQLTestSubscriptionAwaitAndGetResponseTest.java
-
-
 # casper-event-store-graphql
-An Event Store Implementation using Casper SDK +  MongoDB + GraphQL
-
-# Technical Documentation
-## Architecture
-```plantuml
-@startuml
-'!theme sandstone
-!theme plain
-component casper as "casper node"
-rectangle "Event Store" {
-component back as "java service"
-component db as "mongoDB"
-}
-actor User
-back <-> casper
-back <-l-> db
-User <--> back : "GraphQL"
-@enduml
-```
-
-```plantuml
-@startwbs
-* Event Store
-** MongoDB
-** Java Service
-*** Casper Java SDK
-*** Spring Boot
-*** Spring Data MongoDB
-*** GraphQL - ProjectReactor
-** Tools
-*** MongoDB Compass Gui
-*** Postman
+This repository contains the project submitted to Casper Hackathon: [The Event Store Implementation](https://gitcoin.co/issue/casper-network/gitcoin-hackathon/27/100026600)
 
 
-@endwbs
-```
+### Challenge Description:
+Build an event store implementation using an SDK + MongoDB + GraphQL.
 
 
-# RUN
+
+## Technical Documentation
+
+![source: docs/images/Diagrams_plant_uml.md](docs/images/Diagrams_plant_uml.png)
+
+
+# Start Casper Network and MongoDB Containers
+
+To improve my productivity I created a **docker-compose** file that runs two containers: one running a **casper network** using the nctl tool and other a **MongoDB** database.
+
+So the first step is to enter the docker folder and run docker-compose as below.
 
 ```bash
 
 cd docker/
 docker-compose up
+```
 
-# other terminal
+In another terminal we will start the casper network with the following commands:
 
+```bash
 docker exec -it nctl /bin/bash
 
 cd ~/dev
@@ -68,42 +42,96 @@ sleep 1
 nctl-status
 ```
 
-mvn clean install
-mvn spring-boot:run
+Expected result:
+![Casper Network](docs/images/Screenshot%20from%202021-10-10%2022-47-32.png)
 
 
 
 
 
+### Testing MongoDB
+Let's test if MongoDB is running correctly, open your MongoDB container:
 
-
-
-
-
-
-
-
-
-
-# 2. Requisites
-
-## 2.1 MongoDB
-Start MongoDB in container container:
-```bash
-cd docker
-docker-compose up -d
-```
-
-Test your mongo instance:
 ```bash
 docker exec -it mongo bash
 mongo mongodb://admin:admin123@localhost:27017
 show dbs
 ```
-
+Expected result:
 ![MongoDB](docs/images/Screenshot%20from%202021-10-04%2016-27-12.png)
 
 
+### Testing Casper Network
+
+Let's test if Casper Network **event stream server** is accessible in your localhost.
+
+```bash
+curl -s  http://localhost:18102/events/main
+```
+Expected result:
+![MongoDB](docs/images/Screenshot%20from%202021-10-10%2023-06-23.png)
+
+
+
+# Start the Event Store
+
+Run the following commands to use Maven to build and run the application:
+
+```bash
+mvn clean install
+mvn spring-boot:run
+```
+
+In a few seconds the result of the processing of events from the Casper Network is expected to appear:
+![evt](docs/images/Screenshot%20from%202021-10-10%2023-14-27.png)
+
+
+## Execute some GraphQL requests
+
+### Using GraphQLi
+Open your browser on the following address:
+
+[http://localhost:8080/graphiql](http://localhost:8080/graphiql?query=%7B%0A%20%20allBlocks%20%7B%0A%20%20%20%20hash%0A%20%20%20%20header%7B%0A%20%20%20%20%20%20parent_hash%0A%20%20%20%20%20%20state_root_hash%0A%20%20%20%20%20%20era_end%0A%20%20%20%20%20%20era_id%0A%20%20%20%20%7D%0A%20%20%20%20body%7B%0A%20%20%20%20%20%20proposer%0A%20%20%20%20%20%20deploy_hashes%0A%20%20%20%20%20%20transfer_hashes%0A%20%20%20%20%7D%0A%20%20%20%20proofs%0A%20%20%20%20createdAt%0A%20%20%7D%0A%7D%0A)
+![evt](docs/images/Screenshot%20from%202021-10-10%2023-28-59.png)
+
+
+
+### Using Curl
+
+```bash
+curl -g -X POST -H "Content-Type: application/json" -d '{"query":"query{allBlocks{hash}}"}' http://localhost:8080/graphql | jq
+```
+![evt](docs/images/Screenshot%20from%202021-10-10%2023-22-25.png)
+
+```bash
+curl -g -X POST -H "Content-Type: application/json" -d '{"query":"query{allBlocks {hash header{ parent_hash state_root_hash era_id } body{ proposer deploy_hashes transfer_hashes}proofs createdAt}}"}' http://localhost:8080/graphql | jq
+```
+![evt](docs/images/Screenshot%20from%202021-10-10%2023-21-37.png)
+
+
+
+
+
+### Throubleshooting
+
+
+Check if Casper Network started event stream server:
+
+```bash
+docker exec -it nctl /bin/bash
+grep -R --include=*.log "started event stream server" ~/dev/casper-node/utils/nctl
+```
+
+Check if Casper Network is running properly:
+
+```bash
+docker exec -it nctl /bin/bash
+
+lsof | grep LISTEN | cut -d':' -f2 | sort | uniq
+```
+
+
+# 2. Other Tools
 
 ## 2.2 MongoDB Compass Gui
 
@@ -122,127 +150,9 @@ source: https://docs.mongodb.com/compass/current/install/
 ```bash
 mongodb-compass
 ```
-![MongoDB Compass](docs/images/Screenshot%20from%202021-10-04%2016-24-22.png)
-
 2. **Conect** to your MondoDB with the following URI:
 `mongodb://admin:admin123@localhost:27017`
 
-
-
-
-
-
-
-# 3. Future Improvements
-
-
-Use Hash as MongoDB identifier instead ObjectID auto-generated id.
-
-
-## 3.1 Migrate to a Reactive Stack
-### 3.1.1 Spring Data Reactive MongoDB (NOSQL)
-(1)
-**Title**: Use "Spring Data Reactive MongoDB" instead "Spring Data MongoDB"
-**Justification**: Reactive apps allow you to scale better if you're dealing with lots of streaming data. They're non-blocking and tend to be more efficient because they're not tying up processing while waiting for stuff to happen. Reactive systems embrace asynchronous I/O.
-
-(2)
-**Title**: Use "Spring Reactive Web" instead "Spring Web"
-**Justification**: The spring-web-reactive module contains the Spring Web Reactive framework that supports the @Controller programming model. It re-defines many of the Spring MVC contracts such as HandlerMapping and HandlerAdapter to be asynchronous and non-blocking and to operate on the reactive HTTP request and response.
-
-### 3.1.2 Testing
-
-(3)
-#### Embedded MongoDB Database (TESTING)
-**Title**: Use "Embedded MongoDB Database"
-**Justification**: Provides a plataform neutral way for running MongoDB in unit tests.
-
-
-
-test
-<a href="https://asciinema.org/a/bpUwklc2PS45j4ifL2AWp6rm9" target="_blank"><img src="https://asciinema.org/a/bpUwklc2PS45j4ifL2AWp6rm9.svg" /></a>
-
-time docker-compose build
-
-
-
-
-docker run --interactive --tty --entrypoint /bin/sh docker_nctl
-# remove chaincode docker images
-docker rm $(docker ps -aq)
-# remove volumes
-docker volume rm $(docker volume ls -q)
-
-
-docker system prune -a
-
-
-
-docker run --interactive --tty --entrypoint /bin/bash docker_nctl
-docker run --interactive --tty --entrypoint /bin/bash docker_casper-client
-
-
-
-## START
-cd ~/dev
-/root/evt/docker/nctl/nctl_compile.bash
-
-### tools
-nctl-assets-setup
-sleep 10
-nctl-start
-nctl-status
-
-nctl-view-faucet-account
-
----------------------------------------------
-
-
-
-casper-client get-state-root-hash --node-address http://localhost:11101
-
-nctl-view-faucet-account
-
-grep -R "started event stream server" ~/dev/casper-node/utils/nctl/dumps
-
-curl -s  http://localhost:18102/events/main
-
-lsof | grep LISTE | cut -d':' -f2 | sort | uniq
-11101 (LISTEN)
-11102 (LISTEN)
-11103 (LISTEN)
-11104 (LISTEN)
-11105 (LISTEN)
-14101 (LISTEN)
-14102 (LISTEN)
-14103 (LISTEN)
-14104 (LISTEN)
-14105 (LISTEN)
-18101 (LISTEN)
-18102 (LISTEN)
-18103 (LISTEN)
-18104 (LISTEN)
-18105 (LISTEN)
-22101 (LISTEN)
-22102 (LISTEN)
-22103 (LISTEN)
-22104 (LISTEN)
-22105 (LISTEN)
-
-
-
-
-
-
-
-
-
-
-curl -g -X POST -H "Content-Type: application/json" -d '{"query":"query{allBlocks {hashId}}"}' http://localhost:8080/graphql | jq
-
-
-
-
-
-
-
+![MongoDB Compass](docs/images/Screenshot%20from%202021-10-10%2023-33-25.png)
+![MongoDB Compass](docs/images/Screenshot%20from%202021-10-10%2023-33-53.png)
 
