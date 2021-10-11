@@ -20,8 +20,8 @@ import lombok.NoArgsConstructor;
 @Document("blockAdded")
 public class BlockAdded {
 	String hash;
-    BlockAddedHeader header;
-    BlockAddedBody body;
+    BlockHeader header;
+    BlockBody body;
     List<String> proofs;
 	// MongoDB object properties
 	@Version

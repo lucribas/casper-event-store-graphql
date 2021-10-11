@@ -11,7 +11,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-public class BlockAddedBody {
+public class BlockBody {
     String proposer;
     List<String> deploy_hashes;
     List<String> transfer_hashes;

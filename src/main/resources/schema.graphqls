@@ -2,18 +2,38 @@ schema {
     query: Query
 }
 
-type Block {
-    hashId: String
-    header: [String]
-    body: [String]
+type BlockHeader {
+	parent_hash: String
+	state_root_hash: String
+	body_hash: String
+	random_bit: Boolean
+	accumulated_seed: String
+	era_end: Long
+	timestamp: String
+	era_id: Long
+	height: Long
+	protocol_version: String
+}
+
+type BlockBody {
+    proposer: String
+    deploy_hashes: [String]
+	transfer_hashes: [String]
+}
+
+type BlockAdded {
+    hash: String
+    header: BlockHeader
+    body: BlockBody
     proofs: [String]
     createdAt: String
     lastModified: String
     version: Int
 }
 
+
 type Query {
-    block(hashId : String!): Block
-    allBlocks : [Block]
+    block(hash : String!): BlockAdded
+    allBlocks : [BlockAdded]
 }
 
