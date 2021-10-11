@@ -15,29 +15,29 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class QueryResolver implements GraphQLQueryResolver {
 
-	private final BlockRepository blockRepository;
+    private final BlockRepository blockRepository;
 
-	private static Logger logger = LoggerFactory.getLogger(QueryResolver.class);
+    private static Logger logger = LoggerFactory.getLogger(QueryResolver.class);
 
     public BlockAdded block(String hash) {
-		logger.info("block("+hash+")");
+        logger.info("block("+hash+")");
         return blockRepository.findById(hash)
                 .orElseThrow(() -> new BlockNotFoundException("Block not found", hash));
     }
 
     public Iterable<BlockAdded> allBlocks() {
-		logger.info("allBlocks()");
+        logger.info("allBlocks()");
         return blockRepository.findAll();
     }
 
-	public static byte[] hexStringToByteArray(String s) {
-		int len = s.length();
-		byte[] data = new byte[len / 2];
-		for (int i = 0; i < len; i += 2) {
-			data[i / 2] = (byte) ((Character.digit(s.charAt(i), 16) << 4)
-								 + Character.digit(s.charAt(i+1), 16));
-		}
-		return data;
-	}
+    public static byte[] hexStringToByteArray(String s) {
+        int len = s.length();
+        byte[] data = new byte[len / 2];
+        for (int i = 0; i < len; i += 2) {
+            data[i / 2] = (byte) ((Character.digit(s.charAt(i), 16) << 4)
+                                 + Character.digit(s.charAt(i+1), 16));
+        }
+        return data;
+    }
 
 }

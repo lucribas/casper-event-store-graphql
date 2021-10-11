@@ -17,7 +17,7 @@ services:
     container_name: nctl
     build:
       context: ../.
-      dockerfile: docker/Dockerfile.nctl  #o path aqui eh apartir do context
+      dockerfile: docker/Dockerfile.nctl
     tty: true
     ports:
       - 11101-11105:11101-11105
@@ -30,7 +30,7 @@ services:
     container_name: casper-client
     build:
       context: .
-      dockerfile: Dockerfile.casper-client  #o path aqui eh apartir do context
+      dockerfile: Dockerfile.casper-client
     tty: true
     networks:
       - casper-network
