@@ -12,7 +12,6 @@ public class CasperJson {
 
 	static {
 		gson = new GsonBuilder().enableComplexMapKeySerialization().setDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSSX")
-				// .setDateFormat(DateFormat.LONG)
 				.setFieldNamingPolicy(FieldNamingPolicy.IDENTITY).setVersion(1.0).create();
 	}
 

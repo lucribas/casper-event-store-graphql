@@ -1,3 +1,5 @@
+scalar JSON
+
 schema {
     query: Query
 }
@@ -8,7 +10,7 @@ type BlockHeader {
 	body_hash: String
 	random_bit: Boolean
 	accumulated_seed: String
-	era_end: Long
+	era_end: JSON
 	timestamp: String
 	era_id: Long
 	height: Long
