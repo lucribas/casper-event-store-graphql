@@ -19,12 +19,12 @@ import lombok.NoArgsConstructor;
 @Builder
 @Document("blockAdded")
 public class BlockAdded {
-	String hash;
+    String hash;
     BlockHeader header;
     BlockBody body;
     List<String> proofs;
-	// MongoDB object properties
-	@Version
+    // MongoDB object properties
+    @Version
     private Long version;
     @CreatedDate
     private DateTime createdAt;

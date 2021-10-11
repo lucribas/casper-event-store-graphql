@@ -23,9 +23,9 @@ import reactor.core.publisher.Flux;
 @RequiredArgsConstructor
 public class EventConsumer {
 
-	private final BlockRepository blockRepository;
+    private final BlockRepository blockRepository;
 
-	private static Logger logger = LoggerFactory.getLogger(EventConsumer.class);
+    private static Logger logger = LoggerFactory.getLogger(EventConsumer.class);
     private WebClient client = WebClient.create("http://localhost:18102");
 
     @Async
@@ -37,29 +37,29 @@ public class EventConsumer {
             .bodyToFlux(String.class);
 
         stringStream.subscribe(content -> {
-			logger.info("Current time: {} - Received content: {} ", LocalTime.now(), content);
-			save(content);
-		}, error -> logger.error("Error retrieving content: {}", error), () -> logger.info("Completed!!!"));
+            logger.info("Current time: {} - Received content: {} ", LocalTime.now(), content);
+            save(content);
+        }, error -> logger.error("Error retrieving content: {}", error), () -> logger.info("Completed!!!"));
     }
 
 
-	public void save(String content) {
+    public void save(String content) {
 
-		JSONObject json = new JSONObject(content);
+        JSONObject json = new JSONObject(content);
 
-		if ( json.has("BlockAdded") ) {
-			content = json.getJSONObject("BlockAdded").getJSONObject("block").toString();
-			// logger.info("\t\t--->" + content);
-			BlockAdded block = CasperJson.fromJson(content, BlockAdded.class);
-			logger.info("\t\tDecoded as "+block);
-			blockRepository.save(block);
-		}
-	}
+        if ( json.has("BlockAdded") ) {
+            content = json.getJSONObject("BlockAdded").getJSONObject("block").toString();
+            // logger.info("\t\t--->" + content);
+            BlockAdded block = CasperJson.fromJson(content, BlockAdded.class);
+            logger.info("\t\tDecoded as "+block);
+            blockRepository.save(block);
+        }
+    }
 
-	@PostConstruct
-	private void init() {
-		consumeFlux();
-		logger.info("EventConsumer Running!!");
-	}
+    @PostConstruct
+    private void init() {
+        consumeFlux();
+        logger.info("EventConsumer Running!!");
+    }
 
 }
