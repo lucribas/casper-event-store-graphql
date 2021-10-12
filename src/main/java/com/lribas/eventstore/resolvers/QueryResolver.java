@@ -1,6 +1,5 @@
 package com.lribas.eventstore.resolvers;
 
-import com.coxautodev.graphql.tools.GraphQLQueryResolver;
 import com.lribas.eventstore.error.BlockNotFoundException;
 import com.lribas.eventstore.model.BlockAdded;
 import com.lribas.eventstore.repository.BlockRepository;
@@ -9,6 +8,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
 
+import graphql.kickstart.tools.GraphQLQueryResolver;
 import lombok.RequiredArgsConstructor;
 
 @Component

@@ -12,4 +12,10 @@ public class ApplicationConfig {
     public GraphQLScalarType jsonType() {
         return ExtendedScalars.Json;
     }
+
+	@Bean
+    public GraphQLScalarType longType() {
+        return ExtendedScalars.GraphQLLong;
+    }
+
 }

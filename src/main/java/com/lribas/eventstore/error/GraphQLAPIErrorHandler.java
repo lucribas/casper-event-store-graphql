@@ -8,7 +8,8 @@ import org.springframework.stereotype.Component;
 
 import graphql.ExceptionWhileDataFetching;
 import graphql.GraphQLError;
-import graphql.servlet.GraphQLErrorHandler;
+import graphql.kickstart.execution.error.GraphQLErrorHandler;
+
 
 @Component
 public class GraphQLAPIErrorHandler implements GraphQLErrorHandler {
