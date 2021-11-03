@@ -1,10 +1,23 @@
 # casper-event-store-graphql
-This repository contains the project submitted to Casper Hackathon: [The Event Store Implementation](https://gitcoin.co/issue/casper-network/gitcoin-hackathon/27/100026600)
+## History
+
+This repository contains the **winner** 🏆 project, submitted to **Casper Hackathon** and selected to earn the $10,000 reward of *advanced category*.
+Here is the work submition to **GitCoin** plataform: [The Event Store Implementation](https://gitcoin.co/issue/casper-network/gitcoin-hackathon/27/100026600).
+Here is the demo screencast: [youtube](https://www.youtube.com/watch?v=Qn9ngOMpnac)
+Here is the interview for closing hackathon ceremony: [link](docs/closing_ceremonies.md)
+
+
+## Introduction
+
+This is an **Event Store Implementation** for **[Casper Protocol](https://casperlabs.io/)**.
+
+An **event** can be emitted whenever a new block is minted, a transaction is executed, or a condition occurs in the smart contract.
+The **storage** stores these events in a database (**MongoDB**) and makes it available to applications via **GraphQL**. Then applications can query present and past events.
+In this way, it is easy to build a scalable architecture for many users, allowing new applications and uses of the Casper protocol.
 
 
 ### Challenge Description:
 Build an event store implementation using an SDK + MongoDB + GraphQL.
-
 
 
 ## Detailed Technical Documentation
